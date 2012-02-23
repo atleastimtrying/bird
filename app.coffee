@@ -1,65 +1,71 @@
 stdin = process.openStdin()
 stdin.setEncoding 'utf8'
-trees = []
-rows = 10
-columns = 20
-char = 
-  x:0
-  y:0
 
+#utils
+
+logString = (string)-> console.log "\u001B[2J\u001B[0;0f#{string}"
 roundom = (int)-> Math.ceil Math.random()*int
 
-populateTrees = ->
-  for whatever in [0..20]
-    trees.push 
-      x: roundom columns
-      y: roundom rows
+class Table
+  constructor:->
+    @rows = 10
+    @columns = 20
+    @arr = []
+    for y in [0..@rows]
+      @arr[y] = []
+      @arr[y].push(".") for x in [0..@columns]
+  
+  draw: ->
+    string = ''
+    for row in @arr
+      string += '\n'
+      string += cell for cell in row
+    logString string
 
-populateTrees()
+  get: (x,y)-> @arr[x][y]
 
-drawTree = (tree)-> table[tree.y][tree.x] = "&"
+  set: (x,y, val)-> @arr[y][x] = val
 
-makeTable = ->
-  table = []
-  for y in [0..rows]
-    table[y] = []
-    table[y].push(".") for x in [0..columns] 
-  table
+class Tree
+  constructor: ->
+    @x = roundom table.columns
+    @y = roundom table.rows
 
-table = makeTable()
+  draw: -> table.set @x, @y, "&"
 
-logString = (string)->
-  console.log "\u001B[2J\u001B[0;0f#{string}"
+class Trees
+  arr: []
+  constructor: -> @arr.push new Tree for i in [0..20]
+  draw: -> tree.draw() for tree in @arr
 
-logTable = ->
-  string = ''
-  for row in table
-    string += '\n'
-    string += cell for cell in row
-  logString string
+class Character
+  constructor: ->
+    @x = 0
+    @y = 0
 
-moveChar = (input)->
-  modifyChar input
-  edgeDetection()
+  draw: (input)->
+    table.set @x, @y, "."
+    @move input
+    @edgeDetection()
+    table.set @x, @y, "@"
 
+  edgeDetection: ->
+    @x = 0 if @x > table.columns
+    @x = table.columns if @x < 0
+    @y = 0 if @y > table.rows
+    @y = table.rows if @y < 0
 
-edgeDetection = ->
-  char.x = 0 if char.x > columns
-  char.x = columns if char.x < 0
-  char.y = 0 if char.y > rows
-  char.y = rows if char.y < 0
+  move: (input)->
+    @y -= 1 if input is "w" and table.get @y - 1, @x isnt "&"
+    @y += 1 if input is "s" and table.get @y + 1, @x isnt "&"
+    @x -= 1 if input is "a" and table.get @y, @x - 1 isnt "&"
+    @x += 1 if input is "d" and table.get @y, @x + 1 isnt "&"
 
-modifyChar = (input)->
-  char.y -= 1 if input is "w" and table[char.y - 1][char.x] isnt "&"
-  char.y += 1 if input is "s" and table[char.y + 1][char.x] isnt "&"
-  char.x -= 1 if input is "a" and table[char.y][char.x - 1] isnt "&"
-  char.x += 1 if input is "d" and table[char.y][char.x + 1] isnt "&"
+table = new Table
+trees = new Trees
+char = new Character
 
-render = (input)->
-  drawTree tree for tree in trees
-  table[char.y][char.x] = "."
-  moveChar input[0]
-  table[char.y][char.x] = "@"
-  logTable()
-
-stdin.on 'data', (input)-> render(input)
+stdin.on 'data', (input)->
+  trees.draw()
+  char.draw input[0]
+  table.draw()
