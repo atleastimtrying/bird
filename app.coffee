@@ -56,10 +56,10 @@ class Character
     @y = table.rows if @y < 0
 
   move: (input)->
-    @y -= 1 if input is "w" and table.get @y - 1, @x isnt "&"
-    @y += 1 if input is "s" and table.get @y + 1, @x isnt "&"
-    @x -= 1 if input is "a" and table.get @y, @x - 1 isnt "&"
-    @x += 1 if input is "d" and table.get @y, @x + 1 isnt "&"
+    @y -= 1 if input is "w" #and table.get @y - 1, @x isnt "&"
+    @y += 1 if input is "s" #and table.get @y + 1, @x isnt "&"
+    @x -= 1 if input is "a" #and table.get @y, @x - 1 isnt "&"
+    @x += 1 if input is "d" #and table.get @y, @x + 1 isnt "&"
 
 table = new Table
 trees = new Trees
