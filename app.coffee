@@ -38,6 +38,25 @@ class Trees
   constructor: -> @arr.push new Tree for i in [0..20]
   draw: -> tree.draw() for tree in @arr
 
+class Enemy
+  constructor: ->
+    @x = 4
+    @y = 4
+  draw: -> 
+    table.set @x, @y, " "
+    @move()
+    @edgeDetection()
+    table.set @x, @y, 'ఈ'
+  edgeDetection: ->
+    @x = 0 if @x > table.columns
+    @x = table.columns if @x < 0
+    @y = 0 if @y > table.rows
+    @y = table.rows if @y < 0
+
+  move: (input)->
+    @y -= 1
+    @x += 1
+
 class Character
   constructor: ->
     @x = 0
@@ -64,8 +83,10 @@ class Character
 table = new Table
 trees = new Trees
 char = new Character
+enemy = new Enemy
 
 stdin.on 'data', (input)->
   trees.draw()
+  enemy.draw()
   char.draw input[0]
   table.draw()
