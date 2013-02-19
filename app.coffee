@@ -31,7 +31,7 @@ class Tree
     @x = roundom table.columns
     @y = roundom table.rows
 
-  draw: -> table.set @x, @y, "&"
+  draw: -> table.set @x, @y, "↟"
 
 class Trees
   arr: []
