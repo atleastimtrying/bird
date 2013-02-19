@@ -13,7 +13,7 @@ class Table
     @arr = []
     for y in [0..@rows]
       @arr[y] = []
-      @arr[y].push(".") for x in [0..@columns]
+      @arr[y].push(" ") for x in [0..@columns]
   
   draw: ->
     string = ''
@@ -44,10 +44,10 @@ class Character
     @y = 0
 
   draw: (input)->
-    table.set @x, @y, "."
+    table.set @x, @y, " "
     @move input
     @edgeDetection()
-    table.set @x, @y, "@"
+    table.set @x, @y, "⚲"
 
   edgeDetection: ->
     @x = 0 if @x > table.columns
@@ -56,10 +56,10 @@ class Character
     @y = table.rows if @y < 0
 
   move: (input)->
-    @y -= 1 if input is "w" #and table.get @y - 1, @x isnt "&"
-    @y += 1 if input is "s" #and table.get @y + 1, @x isnt "&"
-    @x -= 1 if input is "a" #and table.get @y, @x - 1 isnt "&"
-    @x += 1 if input is "d" #and table.get @y, @x + 1 isnt "&"
+    @y -= 1 if input is "w" 
+    @y += 1 if input is "s"
+    @x -= 1 if input is "a"
+    @x += 1 if input is "d"
 
 table = new Table
 trees = new Trees
