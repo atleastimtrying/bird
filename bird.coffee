@@ -6,6 +6,7 @@ roundom = (int)-> Math.ceil Math.random()*int
 
 class Table extends events.EventEmitter
   constructor:(input)->
+    @setMaxListeners 0
     @rows = 10
     @columns = 20
     @won = no
@@ -38,7 +39,7 @@ class Tree
     @x = roundom table.columns
     @y = roundom table.rows
     @table.on 'draw', @draw
-  draw: => @table.set @x, @y, "↟"
+  draw: => @table.set @x, @y, "\033[1;32m↟\033[1;0m"
 
 
 class Bird
@@ -51,7 +52,7 @@ class Bird
     @table.set @x, @y, " "
     @move()
     @edgeDetection()
-    @table.set @x, @y, 'ఈ'
+    @table.set @x, @y, '\033[1;36mఈ\033[1;0m'
   
   edgeDetection: ->
     @x = 0 if @x > @table.columns
@@ -81,7 +82,7 @@ class Player
     @treeDetection()
     @caughtBird()
     @move() if @moving
-    @table.set @x, @y, "⚲" 
+    @table.set @x, @y, "\033[1;34m⚲\033[1;0m" 
 
   caughtBird: =>
     @table.won is yes if @x is @bird.x and @y is @bird.y
@@ -93,7 +94,7 @@ class Player
     @nextY = @table.rows if @nextY < 0
 
   treeDetection: ->
-    if @table.get(@nextY, @nextX) isnt "↟"
+    if @table.get(@nextY, @nextX) isnt "\033[1;32m↟\033[1;0m"
       @moving = yes
     else
       @moving = no
@@ -122,10 +123,10 @@ class App
 
 app = new App
 
-console.log "Welcome to catch the bird!\n
-This is the bird ఈ.\n
-This is a tree ↟ you can't walk through trees.\n
-This is you ⚲.\n
+console.log "\033[1;0mWelcome to catch the bird!\n
+This is the bird \033[1;36mఈ\033[1;0m.\n
+This is a tree \033[1;32m↟\033[1;0m you can't walk through trees.\n
+This is you \033[1;34m⚲\033[1;0m.\n
 To move around type w s a or d and hit enter.\n
 The aim of the game is to catch the bird.\n
 Hit Enter to begin!"
